@@ -1,0 +1,42 @@
+{% extends 'partials/_layout.html' %}
+{% block content %}
+<div class="wrapper">
+    {% include 'partials/_sidebar.html' %}
+    <div class="main">
+        {% include 'partials/_navbar.html' %}
+        <main class="content">
+            <div class="container-fluid">
+
+                <div class="header">
+                    <h1 class="header-title">
+                        {% block page_header_title %}Blank Page{% endblock page_header_title %}
+                    </h1>
+                    <p class="header-subtitle">
+                        {% block page_header_subtitle %}
+                            Your bounce rate increased by 5.25% over the past 30 days.
+                        {% endblock page_header_subtitle %}
+                    </p>
+                </div>
+                {% block page_content %}
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Empty card</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="my-5">&nbsp;</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% endblock page_content %}
+            </div>
+        </main>
+        {% include 'partials/_footer.html' %}
+    </div>
+
+</div>
+{% endblock content %}

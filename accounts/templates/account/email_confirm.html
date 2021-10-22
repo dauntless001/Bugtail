@@ -1,0 +1,45 @@
+{% extends 'partials/_layout.html' %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block content %}
+<main class="main h-100 w-100">
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                <div class="d-table-cell align-middle">
+                    <div class="card">
+
+                        <div class="card-body text-center">
+                            <h4 class="text-center">Confirm E-mail Address</h4>
+                            {% if confirmation %}
+
+                            {% user_display confirmation.email_address.user as user_display %}
+
+                            <p>{% with confirmation.email_address.email as email %}Please confirm that <a
+                                    href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user 
+                                    {{confirmation.email_address.user }}.{% endwith %}</p>
+
+                            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                                {% csrf_token %}
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                </div>
+                            </form>
+
+                            {% else %}
+
+                            {% url 'account_email' as email_url %}
+
+                            <p>This e-mail confirmation link expired or is invalid. Please <a
+                                    href="{{ email_url }}">issue a new e-mail confirmation request</a></p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

@@ -1,0 +1,50 @@
+{% load static %}
+<nav id="sidebar" class="sidebar">
+    <a class="sidebar-brand" href="index.html">
+        <svg>
+            <use xlink:href="#ion-ios-pulse-strong"></use>
+        </svg>
+        Spark
+    </a>
+    <div class="sidebar-content">
+        <div class="sidebar-user">
+            <img src="{% static 'img/avatars/avatar.jpg' %}" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
+            <div class="fw-bold">Linda Miller</div>
+            <small>Front-end Developer</small>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-header">
+                Main
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'base:dashboard' %}">
+                    <i class="align-middle me-2 fas fa-fw fa-home"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+            <li class="sidebar-item active">
+                <a data-bs-target="#pages" data-bs-toggle="collapse" class="sidebar-link">
+                    <i class="align-middle me-2 fas fa-fw fa-file"></i> <span class="align-middle">Projects</span>
+                </a>
+                <ul id="pages" class="sidebar-dropdown list-unstyled collapse show" data-bs-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-settings.html">Settings</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-clients.html">Clients <span
+                                class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-invoice.html">Invoice</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-pricing.html">Pricing</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-tasks.html">Tasks</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="pages-chat.html">Chat <span
+                                class="sidebar-badge badge rounded-pill bg-primary">New</span></a></li>
+                    <li class="sidebar-item active"><a class="sidebar-link" href="pages-blank.html">Blank Page</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'accounts:settings' %}">
+                    <i class="align-middle me-2 fa-fw fas fa-cog"></i> <span class="align-middle">Settings</span>
+                </a>
+                
+            </li>
+        </ul>
+    </div>
+</nav>

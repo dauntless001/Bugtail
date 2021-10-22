@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Bootstrap 4 Admin &amp; Dashboard Template">
+	<meta name="author" content="Bootlab">
+	<title>Bugtail</title>
+    {% include 'partials/_stylesheet.html' %}
+	<script src="{% static 'js/settings.js' %}"></script>
+    {% block custom_styles %}
+
+    {% endblock custom_styles %}
+	<!-- END SETTINGS -->
+</head>
+
+<body>
+    <div class="splash active">
+		<div class="splash-icon"></div>
+	</div>
+    {% block content %}
+
+    {% endblock content %}
+    {% include 'partials/_script.html' %}
+    {% block custom_scripts %}
+
+    {% endblock custom_scripts %}
+</body>
+
+</html>

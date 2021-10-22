@@ -1,0 +1,1 @@
+from bugtail.settings.base import *

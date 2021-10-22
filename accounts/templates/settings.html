@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+{% block page_header_title %}Settings{% endblock page_header_title %}
+{% block page_header_subtitle %}
+Your bounce rate increased by 5.25% over the past 30 days.
+{% endblock page_header_subtitle %}
+<div class="row">
+    <div class="col-md-3 col-xl-2">
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Profile Settings</h5>
+            </div>
+
+            <div class="list-group list-group-flush" role="tablist">
+                <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#account"
+                    role="tab">
+                    Account
+                </a>
+                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#email" role="tab">
+                    Email
+                </a>
+                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
+                    Password
+                </a>
+                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
+                    Delete account
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-xl-10">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="account" role="tabpanel">
+                <form action="{% url 'accounts:edit_account' %}" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-actions float-end">
+                                <a href="#" class="me-1">
+                                    <i class="align-middle" data-feather="refresh-cw"></i>
+                                </a>
+                                <div class="d-inline-block dropdown show">
+                                    <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                        <i class="align-middle" data-feather="more-vertical"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="card-title mb-0">Public info</h5>
+                        </div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="inputUsername">Username</label>
+                                        {{user_form.username}}
+                                        <!-- <input type="text" class="form-control" id="inputUsername" placeholder="Username"> -->
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="inputUsername">Biography</label>
+                                        {{profile_form.bio}}
+                                        <!-- <textarea rows="2" class="form-control" id="inputBio"
+                                                placeholder="Tell something about yourself"></textarea> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        
+                                        <img alt="Chris Wood" src="{{user.profile.image_url}}"
+                                            class="rounded-circle img-responsive mt-2" width="128" height="128" />
+                                        <div class="mt-2">
+                                            <span class="btn btn-primary"><i class="fas fa-upload"></i> Upload</span>
+                                        </div>
+                                        <small>For best results, use an image at least 128px by 128px in .jpg
+                                            format</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-actions float-end">
+                                <a href="#" class="me-1">
+                                    <i class="align-middle" data-feather="refresh-cw"></i>
+                                </a>
+                                <div class="d-inline-block dropdown show">
+                                    <a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+                                        <i class="align-middle" data-feather="more-vertical"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <h5 class="card-title mb-0">Private info</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="inputFirstName">First name</label>
+                                    {{user_form.first_name}}
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="inputLastName">Last name</label>
+                                    {{user_form.last_name}}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="inputEmail4">Email</label>
+                                {{user_form.email}}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="tab-pane fade" id="email" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Email</h5>
+                        {% if user.emailaddress_set.all %}
+                        <p>The following e-mail addresses are associated with your account:</p>
+
+                        <form action="{% url 'account_email' %}" class="email_list" method="post">
+                            {% csrf_token %}
+                            <fieldset class="blockLabels">
+
+                                {% for emailaddress in user.emailaddress_set.all %}
+                                <div class="card">
+                                    <div class="card-body p-2 d-flex justify-content-between">
+                                        <div class="">
+                                            <input id="email_radio_{{forloop.counter}}" type="radio" name="email" 
+                                            {% if emailaddress.primary or user.emailaddress_set.count is 1 %}checked="checked"
+                                            {%endif %} value="{{emailaddress.email}}" />
+                                            {{emailaddress.email}}
+                                        </div>
+                                        <div>
+                                            {% if emailaddress.verified %}
+                                        <span class="badge bg-success">Verified</span>
+                                        {% endif %}
+                                        {% if emailaddress.primary %}<span class="badge bg-primary">Primary</span>{% endif %}
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <div class="buttonHolder">
+                                    <button class="btn btn-primary" type="submit" name="action_primary">Make
+                                        Primary</button>
+                                    <button class="btn btn-outline-primary" type="submit" name="action_send">Re-send
+                                        Verification</button>
+                                    <button class="btn btn-outline-danger" type="submit" name="action_remove">Remove
+                                        </button>
+                                </div>
+
+                            </fieldset>
+                        </form>
+
+                        {% else %}
+                        <p><strong>Warning:</strong> You currently do not have any e-mail address
+                            set up. You should really add an e-mail address so you can receive notifications, reset your
+                            password, etc.</p>
+
+                        {% endif %}
+
+                        <div class="my-4">
+                            <h5>Add E-mail Address</h5>
+                            <form method="post" action="{% url 'account_email' %}" class="add_email">
+                                {% csrf_token %}
+                                {{ add_email_form.as_p }}
+                                <button name="action_add" class="btn btn-outline-primary" type="submit">Add E-mail</button>
+                            </form>
+                        </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="password" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Password</h5>
+
+                        <form action="{% url 'account_change_password' %}" method="POST">
+                            {% csrf_token %}
+                            {{change_password_form.as_p}}
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}
+{% block custom_scripts %}
+
+{% endblock custom_scripts %}

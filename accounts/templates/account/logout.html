@@ -1,0 +1,32 @@
+{% extends 'partials/_layout.html' %}
+{% load i18n %}
+{% load account socialaccount %}
+{% block content %}
+<main class="main h-100 w-100">
+  <div class="container h-100">
+    <div class="row h-100">
+      <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+        <div class="d-table-cell align-middle">
+          <div class="card">
+              
+            <div class="card-body">
+                <h4 class="text-center">Logout</h4>
+                <form method="post" action="{% url 'account_logout' %}">
+                  {% csrf_token %}
+                  <div class="m-sm-4 text-center">
+                    <p>Are you sure you want to Logout?</p>
+                    <button type="submit" class="btn btn-danger">{% trans 'Sign Out' %}</button>
+                  </div>
+                  
+                </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
