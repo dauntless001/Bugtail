@@ -11,3 +11,5 @@ class Project(model_helper.AuthorDescNameTimeBasedModel):
     def __str__(self):
         return f'{self.name} {self.slug} project'
     
+
+    

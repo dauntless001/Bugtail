@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block page_content %}
+{% block page_header_title %}Projects{% endblock page_header_title %}
+{% block page_header_subtitle %}
+    Listing displays both your projects and the ones that involves you.
+{% endblock page_header_subtitle %}
+
+<div class="row">
+    {% for project in projects %}
+	<div class="col-12 col-md-12 col-xxl-4">
+		<div class="card flex-fill w-100">
+			<div class="card-header">
+				<div class="card-actions float-end">
+					<a href="#" class="me-1">
+						<i class="align-middle" data-feather="refresh-cw"></i>
+					</a>
+					<div class="d-inline-block dropdown show">
+						<a href="#" data-bs-toggle="dropdown" data-bs-display="static">
+							<i class="align-middle" data-feather="more-vertical"></i>
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-end">
+							<a class="dropdown-item" href="#">Action</a>
+							<a class="dropdown-item" href="#">Another action</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+				</div>
+				<h5 class="card-title my-0">{{project.name}}</h5>
+				<p class="card-text">{{project.desc | linebreaks}}</p>
+				
+			</div>
+		</div>
+	</div>
+    {% endfor %}
+</div>
+
+{% endblock page_content %}
+{% block custom_scripts %}
+<script>
+
+</script>
+{% endblock custom_scripts %}
