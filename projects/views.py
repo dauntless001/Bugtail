@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     UserPassesTestMixin,
@@ -6,8 +6,6 @@ from django.contrib.auth.mixins import (
 from django.contrib import messages
 from django.views.generic import (
     ListView,
-    DetailView,
-    DeleteView
 )
 from django.views.generic.base import View
 from projects import models
@@ -30,7 +28,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {
-            'project':self.get_project()
+            'project':self.get_project(),
         }
         return render(request, self.template_name, context)
     
