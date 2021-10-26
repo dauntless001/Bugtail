@@ -20,6 +20,12 @@ class NameTimeBasedModel(TimeBasedModel):
     class Meta:
         abstract = True
 
+class NameDescTimeBasedModel(NameTimeBasedModel):
+    desc = models.TextField()
+
+    class Meta:
+        abstract = True
+
 
 class AuthorNameTimeBasedModel(NameTimeBasedModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE)

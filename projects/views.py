@@ -43,6 +43,32 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
         messages.success(self.request, 'You have no permission to view this page')
         return redirect('base:dashboard')
 
+
+
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'projects/detail.html'
+
+    def get_project(self):
+        return models.Project.objects.get(slug=self.kwargs['slug'])
+
+    def get(self, request, *args, **kwargs):
+        try:
+            project = self.get_project()
+            project.delete()
+            messages.success(self.request, 'Project deleted successfully')
+        except models.Project.DoesNotExist:
+            messages.success(self.request, 'This project seems to not exist')
+        return redirect('base:dashboard')
+
+    def test_func(self):
+        if self.get_project().author == self.request.user:
+            return True
+        return False
+    
+    def handle_no_permission(self):
+        messages.success(self.request, 'You have no permission to view this page')
+        return redirect('base:dashboard')
+
     
 
 
