@@ -17,8 +17,7 @@ class Project(model_helper.AuthorDescNameTimeBasedModel):
 class IssueLabel(model_helper.TimeBasedModel):
     name = models.CharField(max_length=50)
     color = models.CharField(max_length=10)
-    # project = models.ForeignKey(Project, on_delete=models.SET_NULL, 
-    #     null=True, blank=True)
+    short_name = models.CharField(max_length=5)
 
     class Meta:
         verbose_name = 'Issue Label'
@@ -58,6 +57,15 @@ class Issue(model_helper.NameDescTimeBasedModel):
     def assginee_image(self):
         return self.assigned_to.profile.image_url()
 
-    
+class ProjectIssueLabel(model_helper.NameTimeBasedModel):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    color = models.CharField(max_length=10)
+    short_name = models.CharField(max_length=5)
 
+    class Meta:
+        verbose_name = 'Project Issue Label'
+        verbose_name_plural = 'Projects Issues Label'
+
+    def __str__(self):
+        return f'{self.name} - {self.project.name} label'
     
