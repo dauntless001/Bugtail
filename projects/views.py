@@ -23,12 +23,21 @@ class ProjectListView(LoginRequiredMixin, ListView):
 class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'projects/detail.html'
 
+    
+
     def get_project(self):
         return models.Project.objects.get(slug=self.kwargs['slug'])
+    
+    def get_labels(self):
+        # custom_labels = [label for label in models.ProjectIssueLabel.objects.filter(project=self.get_project())]
+        labels = models.IssueLabel.objects.filter(project=self.get_project())
+        return labels
+
 
     def get(self, request, *args, **kwargs):
         context = {
             'project':self.get_project(),
+            'labels' : self.get_labels(),
         }
         return render(request, self.template_name, context)
     

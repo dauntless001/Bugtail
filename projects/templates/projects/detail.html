@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
+{% load project_extras %}
 {% block page_content %}
 {% block page_header_title %}{{project.name}}{% endblock page_header_title %}
 {% block page_header_subtitle %}
     {{project.desc}}.
 {% endblock page_header_subtitle %}
 
-<div style="overflow: scroll;">
+<div style="overflow: scroll;max-height: 500px;">
     <div class="d-flex gx-5">
+        {% for label in labels %}
         <div class="col-12 col-lg-6 col-xl-4">
             <div class="p-3">
                 <div class="card">
@@ -16,47 +18,21 @@
                                 <i class="align-middle" data-feather="plus"></i>
                             </a>
                         </div>
-                        <h5 class="card-title">Open</h5>
+                        <h5 class="card-title">{{label.name.title}}</h5>
                     </div>
                     <div class="card-body p-3">
-                        <div id="tasks-open">
-                            <div class="">
-                                {% for issue in project.issue_set.all %}
-                                {% if not issue.label %}
-                                    {% include 'partials/_task_card.html' with issue=issue %}
-                                {% endif %}
+                        <div id="tasks-{{label.short_name}}">
+
+                                {% fetch_label_tasks project.slug label.short_name as issues %}
+                                {% for issue in issues %}
+                                {% include 'partials/_task_card.html' %}
                                 {% endfor %}
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-6 col-xl-4">
-            <div class="p-3">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-actions float-end">
-                            <a href="#" class="me-1 btn btn-light">
-                                <i class="align-middle" data-feather="plus"></i>
-                            </a>
-                        </div>
-                        <h5 class="card-title">Selected for Development</h5>
-                    </div>
-                    <div class="card-body p-3">
-                        <div id="tasks-selected">
-                            <div class="">
-                                {% for issue in project.issue_set.all %}
-                                {% if issue == 'selected' %}
-                                    {% include 'partials/_task_card.html' with issue=issue %}
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 
