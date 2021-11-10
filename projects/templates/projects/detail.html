@@ -40,15 +40,28 @@
 {% block custom_scripts %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-			dragula([
-				document.querySelector("#tasks-open"),
-                document.querySelector("#tasks-selected"),
-				document.querySelector("#tasks-progress"),
-                document.querySelector("#tasks-review"),
-                document.querySelector("#tasks-completed"),
-				document.querySelector("#tasks-hold"),
+		// 	dragula([
+		// 		document.querySelector("#tasks-open"),
+        //         document.querySelector("#tasks-selected"),
+		// 		document.querySelector("#tasks-progress"),
+        //         document.querySelector("#tasks-review"),
+        //         document.querySelector("#tasks-completed"),
+		// 		document.querySelector("#tasks-hold"),
 				
-			]);
-		});
+		// 	]);
+		// });
+$(document).ready(() => {
+    $.ajax({
+        url : `{% url 'projects:project_detail' 1500 %}`.replace(1500, '{{project.slug}}'),
+        method : 'GET',
+        success: res => {
+            const { labels } = res
+            let labell = JSON.parse(labels)
+        },
+        error : err => {
+            console.log(err)
+        }
+    })
+})
 </script>
 {% endblock custom_scripts %}

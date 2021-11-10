@@ -7,9 +7,11 @@ from django.contrib import messages
 from django.views.generic import (
     ListView,
 )
+from django.http import JsonResponse
 from django.views.generic.base import View
 from projects import models
-
+import json
+from django.core.serializers import serialize
 # Create your views here.
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -35,9 +37,15 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
 
 
     def get(self, request, *args, **kwargs):
+        labels = self.get_labels()
+        if request.is_ajax():
+            data = {}
+            data['labels'] = serialize('json', queryset=labels)
+            return JsonResponse(data)
+
         context = {
             'project':self.get_project(),
-            'labels' : self.get_labels(),
+            'labels' : labels,
         }
         return render(request, self.template_name, context)
     
