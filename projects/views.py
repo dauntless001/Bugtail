@@ -6,12 +6,16 @@ from django.contrib.auth.mixins import (
 from django.contrib import messages
 from django.views.generic import (
     ListView,
+    CreateView,
+    DeleteView,
+    UpdateView
 )
 from django.http import JsonResponse
 from django.views.generic.base import View
 from projects import models
 import json
 from django.core.serializers import serialize
+from projects.forms import ProjectForm
 # Create your views here.
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -21,17 +25,23 @@ class ProjectListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return models.Project.objects.filter(author=self.request.user)
 
+class ProjectCreateView(LoginRequiredMixin, CreateView):
+    form_class = ProjectForm
+    template_name = 'projects/new.html'
+
+    def form_valid(self, form):
+        project = form.save(commit=False)
+        project.author = self.request.user
+        project.save()
+        return redirect('projects:project_detail', project.slug)
 
 class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'projects/detail.html'
-
-    
 
     def get_project(self):
         return models.Project.objects.get(slug=self.kwargs['slug'])
     
     def get_labels(self):
-        # custom_labels = [label for label in models.ProjectIssueLabel.objects.filter(project=self.get_project())]
         labels = models.IssueLabel.objects.filter(project=self.get_project())
         return labels
 
@@ -58,7 +68,52 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
         messages.success(self.request, 'You have no permission to view this page')
         return redirect('base:dashboard')
 
+class ProjectSettingsView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'projects/settings.html'
 
+    def get_project(self):
+        return models.Project.objects.get(slug=self.kwargs['slug'])
+
+    def get(self, request, *args, **kwargs):
+        project = self.get_project()
+        projectForm = ProjectForm(instance=project)
+        context = {
+            'project':project,
+            'projectForm':projectForm
+        }
+        return render(request, self.template_name, context)
+
+    def test_func(self):
+        if self.get_project().author == self.request.user:
+            return True
+        return False
+    
+    def handle_no_permission(self):
+        messages.success(self.request, 'You have no permission to view this page')
+        return redirect('base:dashboard')
+
+
+class ProjectEditView(LoginRequiredMixin, UserPassesTestMixin, View):
+    template_name = 'projects/new.html'
+
+    def get_project(self):
+        return models.Project.objects.get(slug=self.kwargs['slug'])
+
+    def post(self, request, *args, **kwargs):
+        form = ProjectForm(request.POST, instance=self.get_project())
+        if form.is_valid:
+            form.save()
+            messages.success(self.request, 'Project Updated successfully')
+            return redirect('projects:project_detail', self.get_project().slug)
+
+    def test_func(self):
+        if self.get_project().author == self.request.user:
+            return True
+        return False
+    
+    def handle_no_permission(self):
+        messages.success(self.request, 'You have no permission to view this page')
+        return redirect('base:dashboard')
 
 class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = 'projects/detail.html'
@@ -73,7 +128,7 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
             messages.success(self.request, 'Project deleted successfully')
         except models.Project.DoesNotExist:
             messages.success(self.request, 'This project seems to not exist')
-        return redirect('base:dashboard')
+        return redirect('projects:project_list')
 
     def test_func(self):
         if self.get_project().author == self.request.user:

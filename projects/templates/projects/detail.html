@@ -5,7 +5,6 @@
 {% block page_header_subtitle %}
     {{project.desc}}.
 {% endblock page_header_subtitle %}
-
 <div style="overflow: scroll;max-height: 500px;">
     <div class="d-flex gx-5">
         {% for label in labels %}
@@ -40,28 +39,30 @@
 {% block custom_scripts %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-		// 	dragula([
-		// 		document.querySelector("#tasks-open"),
-        //         document.querySelector("#tasks-selected"),
-		// 		document.querySelector("#tasks-progress"),
-        //         document.querySelector("#tasks-review"),
-        //         document.querySelector("#tasks-completed"),
-		// 		document.querySelector("#tasks-hold"),
-				
-		// 	]);
-		// });
-$(document).ready(() => {
     $.ajax({
         url : `{% url 'projects:project_detail' 1500 %}`.replace(1500, '{{project.slug}}'),
         method : 'GET',
         success: res => {
             const { labels } = res
             let labell = JSON.parse(labels)
+            let project_labels = Array.from(labell)
+            let label_list = project_labels.map(label => document.querySelector('#tasks-'+label.fields.short_name))
+            dragula(label_list, {
+                copy: false,
+                moves: function (el, source, handle, sibling) {
+                    return true; 
+                },
+                accepts: function (el, target, source, sibling) {
+                    console.log(sibling, 'to')
+                    return true; 
+                },
+            })
         },
         error : err => {
             console.log(err)
         }
     })
-})
+});
+
 </script>
 {% endblock custom_scripts %}

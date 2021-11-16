@@ -5,42 +5,38 @@
     Your bounce rate increased by 5.25% over the past 30 days.
 {% endblock page_header_subtitle %}
 
-<div class="row">
-	<div class="col-xl-12 col-xxl-5 d-flex">
-		<div class="w-100">
-			<div class="row">
-				{% for project in projects %}
-				<div class="col-sm-3">
-					<div class="card">
-						<div class="card-body">
-							<div class="row">
-								<div class="col mt-0">
-									<h5 class="card-title">{% if project.author == request.user %}Owner{% else %}Collaborator{% endif %}</h5>
-								</div>
 
-								<div class="col-auto">
-									<div class="avatar">
-										<div class="avatar-title rounded-circle bg-primary-dark">
-											<i class="align-middle" 
-											data-feather="{% if project.author == request.user %}user{% else %}users{% endif %}"></i>
-										</div>
-									</div>
-								</div>
+<div class="row">
+	{% for project in projects %}
+	<div class="col-sm-3">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col mt-0">
+						<h5 class="card-title">{% if project.author == request.user %}Owner{% else %}Collaborator{% endif %}</h5>
+					</div>
+
+					<div class="col-auto">
+						<div class="avatar">
+							<div class="avatar-title rounded-circle bg-primary-dark">
+								<i class="align-middle" 
+								data-feather="{% if project.author == request.user %}user{% else %}users{% endif %}"></i>
 							</div>
-							<h1 class="display-5 mt-2 mb-4">{{project.name}}</h1>
-							<div class="mb-0">
-								{{project.desc | truncatewords:3}}
-							</div>
-							<a href="{% url 'projects:project_detail' project.slug %}">View</a>
-							
 						</div>
 					</div>
 				</div>
-				{% endfor %}
+				<h1 class="display-5 mt-2 mb-4">{{project.name}}</h1>
+				<div class="mb-0">
+					{{project.desc | truncatewords:3}}
+				</div>
+				<a href="{% url 'projects:project_detail' project.slug %}">View</a>
+				
 			</div>
 		</div>
 	</div>
+	{% endfor %}
 </div>
+
 
 
 {% endblock page_content %}

@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_content %}
+{% block page_header_title %}{{project.name.title}} Settings{% endblock page_header_title %}
+{% block page_header_subtitle %}
+{{project.desc | truncatewords:10}}
+{% endblock page_header_subtitle %}
+<div class="row">
+    <div class="col-md-3 col-xl-2">
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Project Settings</h5>
+            </div>
+
+            <div class="list-group list-group-flush" role="tablist">
+                <a class="list-group-item list-group-item-action active" data-bs-toggle="list" href="#editproject"
+                    role="tab">
+                    Edit
+                </a>
+                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#email" role="tab">
+                    Change Ownership
+                </a>
+                <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab">
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-xl-10">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="editproject" role="tabpanel">
+                <form action="{% url 'projects:project_edit' project.slug %}" method="post" enctype="multipart/form-data">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Edit Project Info</h5>
+                        </div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{projectForm.as_p}}
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="email" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Email</h5>
+                        {% if user.emailaddress_set.all %}
+                        <p>The following e-mail addresses are associated with your account:</p>
+
+                        <form action="{% url 'account_email' %}" class="email_list" method="post">
+                            {% csrf_token %}
+                            <fieldset class="blockLabels">
+
+                                {% for emailaddress in user.emailaddress_set.all %}
+                                <div class="card">
+                                    <div class="card-body p-2 d-flex justify-content-between">
+                                        <div class="">
+                                            <input id="email_radio_{{forloop.counter}}" type="radio" name="email" 
+                                            {% if emailaddress.primary or user.emailaddress_set.count is 1 %}checked="checked"
+                                            {%endif %} value="{{emailaddress.email}}" />
+                                            {{emailaddress.email}}
+                                        </div>
+                                        <div>
+                                            {% if emailaddress.verified %}
+                                        <span class="badge bg-success">Verified</span>
+                                        {% endif %}
+                                        {% if emailaddress.primary %}<span class="badge bg-primary">Primary</span>{% endif %}
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <div class="buttonHolder">
+                                    <button class="btn btn-primary" type="submit" name="action_primary">Make
+                                        Primary</button>
+                                    <button class="btn btn-outline-primary" type="submit" name="action_send">Re-send
+                                        Verification</button>
+                                    <button class="btn btn-outline-danger" type="submit" name="action_remove">Remove
+                                        </button>
+                                </div>
+
+                            </fieldset>
+                        </form>
+
+                        {% else %}
+                        <p><strong>Warning:</strong> You currently do not have any e-mail address
+                            set up. You should really add an e-mail address so you can receive notifications, reset your
+                            password, etc.</p>
+
+                        {% endif %}
+
+                        <div class="my-4">
+                            <h5>Add E-mail Address</h5>
+                            <form method="post" action="{% url 'account_email' %}" class="add_email">
+                                {% csrf_token %}
+                                {{ add_email_form.as_p }}
+                                <button name="action_add" class="btn btn-outline-primary" type="submit">Add E-mail</button>
+                            </form>
+                        </div>
+
+                        
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="password" role="tabpanel">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Delete Project</h5>
+                        <div class="my-3">
+                            <div>
+                                <p>
+                                    This action cannot be undone. This will permanently delete the {{project.author.username}}/{{project.name}} project, wiki, issues, comments, packages, secrets, workflow runs, and remove all collaborator associations.
+                                </p>
+                                <p>
+                                    Please type 
+                                    <span class="fw-bolder" id="project-key">{{project.author.username}}/{{project.name}}</span> to confirm</p>
+                            </div>
+                            <input type="text" class="form-control" onkeyup="getValue(this)">
+                            <div class="my-3">
+                                <a href="{% url 'projects:project_delete' project.slug %}" id="btnDelete" class="btn btn-danger disabled">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}
+{% block custom_scripts %}
+<script>
+    const getValue  = e =>{
+        const inputValue = document.querySelector('#project-input')
+        let value = document.querySelector('#project-key').textContent
+        e.value == value ? $('#btnDelete').removeClass('disabled'):$('#btnDelete').addClass('disabled')
+    } 
+</script>
+{% endblock custom_scripts %}

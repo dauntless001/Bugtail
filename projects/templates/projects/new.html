@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block page_content %}
+	{% block page_header_title %}
+	New Project
+	{% endblock page_header_title %}
+	{% block page_header_subtitle %}
+		
+	{% endblock page_header_subtitle %}
+	{% block side_widgets %}
+    <!-- <a class="btn btn-light" href="{% url 'projects:project_create' %}">New Project</a> -->
+    {% endblock side_widgets %}
+<div class="row">
+    <div class="col-12 col-md-12 col-xxl-12">
+		<div class="card flex-fill w-100">
+			<div class="card-header">
+				
+				<!-- <h5 class="card-title my-0">Project Info</h5> -->
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+				<!-- <p class="card-text">{{project.desc | linebreaks}}</p> -->
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock page_content %}
+{% block custom_scripts %}
+<script>
+
+</script>
+{% endblock custom_scripts %}
