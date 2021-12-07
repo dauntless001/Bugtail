@@ -139,6 +139,9 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
         messages.success(self.request, 'You have no permission to view this page')
         return redirect('base:dashboard')
 
+
+
+
     
 
 

@@ -7,6 +7,13 @@
         <div class="float-end mt-n1">
             <img src="{{issue.assginee_image}}" width="32" height="32" class="rounded-circle" alt="Avatar">
         </div>
+        {% else %}
+        <div class="float-end mt-n1 pt-2">
+            <a href="" class="text-decoration-none text-dark" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <i class="fas fa-user-plus"></i>
+            </a>
+        </div>
         {% endif %}
         <a class="btn btn-primary btn-sm" href="#">View</a>
     </div>
