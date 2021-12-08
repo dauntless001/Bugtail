@@ -1,12 +1,22 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
-        <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+        <h5 id="offcanvasRightLabel">Assign Task</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div>
-            Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists,
-            etc.
+        <div id="offcanvas-desc">
+
         </div>
+        
+        <select name="" id="assign-select" class="form-select " onchange="assignTask(this)">
+            <option value=""></option>
+            {% for collaborator in project.get_collaborators %}
+            {% if collaborator == request.user %}
+            <option value="{{request.user.email}}">Assign to Me</option>
+            {% else %}
+            <option value="{{collaborator.email}}">{{collaborator}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
     </div>
 </div>

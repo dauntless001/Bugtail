@@ -1,16 +1,25 @@
 from accounts.models import User
 from django.db import models
 from bugtail.helpers import model_helper
+
 # Create your models here.
 
 class Project(model_helper.AuthorDescNameTimeBasedModel):
     slug = models.SlugField(default=model_helper.gen_slug)
+    collaborators = models.ManyToManyField(User, related_name='collaborators')
 
     class Meta:
         ordering = ['-created_at']
 
     def __str__(self):
         return f'{self.name} {self.slug} project'
+    
+    def get_author(self):
+        return self.author
+    
+    def get_collaborators(self):
+        collaborators = [self.get_author()]
+        return collaborators + list(self.collaborators.all())
     
 
 
@@ -36,7 +45,6 @@ class Issue(model_helper.NameDescTimeBasedModel):
         low = 'Low', 'Low'
         high = 'High', 'High'
         moderate = 'Moderate', 'Moderate'
-    
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     slug = models.SlugField(default=model_helper.gen_slug)
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, 

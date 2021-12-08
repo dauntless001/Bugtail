@@ -13,7 +13,8 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-actions float-end">
-                            <a href="#" class="me-1 btn btn-light">
+                            <a href="#" class="me-1 btn btn-light" type="button" 
+                                data-bs-toggle="modal" data-bs-target="#centeredModalPrimary">
                                 <i class="align-middle" data-feather="plus"></i>
                             </a>
                         </div>
@@ -36,7 +37,8 @@
         {% endfor %}
     </div>
 </div>
-{% include 'partials/_right_offset_canva.html' %}
+{% include 'partials/_issue_modal.html' %}
+{% include 'partials/_right_offset_canva.html' with project=project %}
 {% endblock page_content %}
 {% block custom_scripts %}
 <script>
@@ -67,5 +69,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
 });
+const getTask = e => {
+        const {title, desc, slug} = e.dataset
+        document.querySelector('#offcanvas-desc').textContent = desc
+        document.querySelector('#assign-select').setAttribute('data-slug', slug)
+    }
+
+const assignTask = e =>{
+
+    const data = {
+        email : e.value,
+        task: e.dataset.slug
+    }
+    $.ajax({
+        url : `{% url 'projects:assign_task' %}`,
+        method : 'GET',
+        data : data,
+        success : res => {
+            console.log(res)
+        },
+        error : err => {
+            console.log(err)
+        }
+    })
+}
 </script>
 {% endblock custom_scripts %}

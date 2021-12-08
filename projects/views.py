@@ -12,6 +12,7 @@ from django.views.generic import (
 )
 from django.http import JsonResponse
 from django.views.generic.base import View
+from accounts.models import User
 from projects import models
 import json
 from django.core.serializers import serialize
@@ -140,7 +141,21 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
         return redirect('base:dashboard')
 
 
-
+def assign_task(request):
+    if request.is_ajax():
+        user = None
+        if request.GET.get('email') != '':
+            email = request.GET.get('email')
+            user = User.objects.get(email=email)
+        slug = request.GET.get('task')
+        task = models.Issue.objects.get(slug=slug)
+        
+        task.assigned_to = user if user else None
+        task.save()
+        data = {}
+        data['message'] = 'Hurray! 🎈'
+        return JsonResponse(data)
+    return redirect('project:project_list')
 
     
 

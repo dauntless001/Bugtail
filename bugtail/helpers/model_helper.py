@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils.crypto import get_random_string
 from accounts.models import User
-
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 def gen_slug():
     return get_random_string(length=8)
@@ -21,7 +22,7 @@ class NameTimeBasedModel(TimeBasedModel):
         abstract = True
 
 class NameDescTimeBasedModel(NameTimeBasedModel):
-    desc = models.TextField()
+    desc = RichTextUploadingField()
 
     class Meta:
         abstract = True
@@ -34,8 +35,8 @@ class AuthorNameTimeBasedModel(NameTimeBasedModel):
         abstract = True
 
 
-class AuthorDescNameTimeBasedModel(AuthorNameTimeBasedModel):
-    desc = models.TextField()
+class AuthorDescNameTimeBasedModel(NameDescTimeBasedModel):
+    pass
 
     class Meta:
         abstract = True
