@@ -37,7 +37,7 @@
         {% endfor %}
     </div>
 </div>
-{% include 'partials/_issue_modal.html' %}
+{% include 'partials/_issue_modal.html' with form=form %}
 {% include 'partials/_right_offset_canva.html' with project=project %}
 {% endblock page_content %}
 {% block custom_scripts %}

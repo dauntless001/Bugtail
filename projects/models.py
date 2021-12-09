@@ -6,7 +6,7 @@ from bugtail.helpers import model_helper
 
 class Project(model_helper.AuthorDescNameTimeBasedModel):
     slug = models.SlugField(default=model_helper.gen_slug)
-    collaborators = models.ManyToManyField(User, related_name='collaborators')
+    collaborators = models.ManyToManyField(User, related_name='collaborators', blank=True)
 
     class Meta:
         ordering = ['-created_at']

@@ -16,7 +16,7 @@ from accounts.models import User
 from projects import models
 import json
 from django.core.serializers import serialize
-from projects.forms import ProjectForm
+from projects.forms import IssueForm, ProjectForm
 # Create your views here.
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -57,6 +57,7 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
         context = {
             'project':self.get_project(),
             'labels' : labels,
+            'form': IssueForm(),
         }
         return render(request, self.template_name, context)
     

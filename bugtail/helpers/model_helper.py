@@ -36,7 +36,7 @@ class AuthorNameTimeBasedModel(NameTimeBasedModel):
 
 
 class AuthorDescNameTimeBasedModel(NameDescTimeBasedModel):
-    pass
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
