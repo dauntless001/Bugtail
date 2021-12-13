@@ -5,6 +5,14 @@
 {% block page_header_subtitle %}
     {{project.desc}}.
 {% endblock page_header_subtitle %}
+{% block contributor %}
+<a href="" class="text-white btn btn-primary" title="Add a Collaborator">
+    <i class="fas fa-user-plus"></i>
+</a>
+<a href="" class="text-white btn btn-outline-primary" title="Collaborators">
+    <i class="fas fa-user-friends"></i>
+</a>                                
+{% endblock contributor %}
 <div style="overflow: scroll;max-height: 500px;">
     <div class="d-flex gx-5">
         {% for label in labels %}
