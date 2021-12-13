@@ -57,7 +57,23 @@ document.addEventListener("DOMContentLoaded", function() {
                     return true; 
                 },
                 accepts: function (el, target, source, sibling) {
-                    console.log(sibling, 'to')
+                    const taskTo = target.id.split('-')[1]
+                    const { slug } = el.dataset
+                    $.ajax({
+                        url : `{% url 'projects:project_detail' 1500 %}`.replace(1500, '{{project.slug}}'),
+                        method : 'POST',
+                        headers: {
+                            "X-CSRFToken": '{{ csrf_token }}'
+                        },
+                        data : {to : `${taskTo}`, slug: slug},
+                        success : res => {
+                            `Working Here`
+                        },
+                        error : err => {
+                            err;
+                        }
+                        
+                    })
                     return true; 
                 },
             })

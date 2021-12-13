@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.fields import TextField
 from django.utils.crypto import get_random_string
 from accounts.models import User
 from ckeditor.fields import RichTextField
@@ -22,7 +23,7 @@ class NameTimeBasedModel(TimeBasedModel):
         abstract = True
 
 class NameDescTimeBasedModel(NameTimeBasedModel):
-    desc = RichTextUploadingField()
+    desc = TextField()
 
     class Meta:
         abstract = True

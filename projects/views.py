@@ -60,6 +60,19 @@ class ProjectDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
             'form': IssueForm(),
         }
         return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            ajaxData = request.POST
+            label = models.IssueLabel.objects.get(project__slug=self.kwargs['slug'],
+                short_name=ajaxData['to'])
+            print(label)
+            issue = models.Issue.objects.get(slug=ajaxData['slug'])
+            issue.label = label
+            issue.save()
+            data = {}
+            data['message'] = 'Successful'
+            return JsonResponse(data)
     
     def test_func(self):
         if self.get_project().author == self.request.user:
