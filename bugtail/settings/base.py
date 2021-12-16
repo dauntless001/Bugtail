@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # Locals
     'accounts',
     'base',
+    'collaborators',
     'projects',
 
     # All Auth Settings

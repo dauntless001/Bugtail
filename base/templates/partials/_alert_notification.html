@@ -1,0 +1,12 @@
+<script>
+    const showNotification = (message, messageType) => {
+        toastr[messageType](message, {
+            positionClass: 'toast-top-center',
+            closeButton: true,
+            progressBar: true,
+            newestOnTop: true,
+            rtl: true,
+            timeOut: '5000'
+        });
+    }
+</script>

@@ -1,0 +1,23 @@
+<div class="modal fade" id="addCollaboratorModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Collaborators</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-3 text-dark">
+                <p class="mb-0">
+                    Enter the correct email address of the person collaborating with you on <b>{{project.name}}</b>
+                </p>
+                <div class="d-flex my-2">
+                    <input type="email" name="" class="form-control" id="addCollaboratorField">
+                    <div class="mx-2">
+                        <button type="submit" class="btn btn-primary" id="addCollaboratorBtn" onclick="addCollaborator()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

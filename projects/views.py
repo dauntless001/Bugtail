@@ -17,6 +17,7 @@ from projects import models
 import json
 from django.core.serializers import serialize
 from projects.forms import IssueForm, ProjectForm
+from collaborators.models import CollaborationRequest
 # Create your views here.
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -167,10 +168,39 @@ def assign_task(request):
         task.assigned_to = user if user else None
         task.save()
         data = {}
-        data['message'] = 'Hurray! 🎈'
+        data['message'] = f'Task Assigned 🎈 to {user}'
+        data['messageType'] = 'success'
         return JsonResponse(data)
     return redirect('project:project_list')
 
-    
-
-
+class AddRemoveCollaboratorView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            ajaxData = request.GET
+            data = {}
+            project = models.Project.objects.get(slug=self.kwargs['slug'])
+            user = User.objects.get(email=ajaxData['email'])
+            project.collaborators.remove(user)
+            data['message'] = f'User with email {ajaxData["email"]}'
+            data['messageType'] = 'success'
+            return JsonResponse(data, safe=False)
+    def post(self, request, *args, **kwargs):
+        
+        if request.is_ajax():
+            data = {}
+            ajaxData = request.POST
+            project = models.Project.objects.get(slug=self.kwargs['slug'])
+            #Check if user exists
+            try:
+                user = User.objects.get(email=ajaxData['email'])
+                if project.collaborators.filter(email=user.email).exists():
+                    data['message'] = 'User with email '+ ajaxData['email'] +' is already a collaborator on '+ project.name
+                    data['messageType'] = 'info'
+                else:
+                    project.collaborators.add(user)
+                    data['message'] = 'Collaborator with email:'+ ajaxData['email']+' has been added'
+                    data['messageType'] = 'success'
+            except:
+                data['message'] = 'User with email '+ ajaxData['email'] +' Appears not to Exist, Please Check Email and try Again'
+                data['messageType'] = 'error'
+            return JsonResponse(data, safe=False)

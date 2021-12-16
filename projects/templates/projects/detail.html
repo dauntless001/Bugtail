@@ -6,12 +6,16 @@
     {{project.desc}}.
 {% endblock page_header_subtitle %}
 {% block contributor %}
-<a href="" class="text-white btn btn-primary" title="Add a Collaborator">
+<a class="text-white btn btn-primary" title="Add a Collaborator"
+data-bs-toggle="modal" data-bs-target="#addCollaboratorModal">
     <i class="fas fa-user-plus"></i>
 </a>
-<a href="" class="text-white btn btn-outline-primary" title="Collaborators">
+{% include 'partials/_add_collaborator_modal.html' %}
+<a class="text-white btn btn-outline-primary" title="Collaborators" 
+data-bs-toggle="modal" data-bs-target="#collaboratorsModal">
     <i class="fas fa-user-friends"></i>
-</a>                                
+</a>
+{% include 'partials/_collaborators_modal.html' with collaborators=project.collaborators.all %}                                
 {% endblock contributor %}
 <div style="overflow: scroll;max-height: 500px;">
     <div class="d-flex gx-5">
@@ -51,7 +55,7 @@
 {% block custom_scripts %}
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-
+    
     $.ajax({
         url : `{% url 'projects:project_detail' 1500 %}`.replace(1500, '{{project.slug}}'),
         method : 'GET',
@@ -110,10 +114,46 @@ const assignTask = e =>{
         method : 'GET',
         data : data,
         success : res => {
-            console.log(res)
+            showNotification(res['message'], res['messageType'])
         },
         error : err => {
-            console.log(err)
+            showNotification('Error Trying to assign task', 'error')
+        }
+    })
+}
+
+const addCollaborator = () => {
+    let collaboratorEmail = document.querySelector('#addCollaboratorField').value
+    $.ajax({
+        url : `{% url 'projects:add_remove_collaborator' 1500 %}`.replace(1500, '{{project.slug}}'),
+        method : 'POST',
+        headers : {'X-CSRFToken':'{{csrf_token}}'},
+        data : {email : collaboratorEmail},
+        success : res => {
+            showNotification(res['message'], res['messageType'])
+            document.querySelector('#addCollaboratorField').value = ''
+        },
+        error : err => {
+            showNotification('Error Trying to send mail to Collaborator', 'error')
+        }
+    })
+}
+
+const removeCollaborator = (e) => {
+    const  {email} = e.dataset
+    $.ajax({
+        url : `{% url 'projects:add_remove_collaborator' 1500 %}`.replace(1500, '{{project.slug}}'),
+        method : 'GET',
+        // headers : {'X-CSRFToken':'{{csrf_token}}'},
+        data : {email : email},
+        success : res => {
+            showNotification(res['message'], res['messageType'])
+            document.getElementById(`user-${email}`).style.display='none'
+            console.log('Hello')
+            
+        },
+        error : err => {
+            showNotification('Error Trying to send mail to Collaborator', 'error')
         }
     })
 }

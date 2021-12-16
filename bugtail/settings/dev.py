@@ -12,6 +12,9 @@ DATABASES['default'] = {
         'NAME': BASE_DIR / 'bugtail.db',
     }
 
+# Email Backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = Path.cwd().joinpath(BASE_DIR).joinpath('assets')

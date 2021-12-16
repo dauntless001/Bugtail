@@ -1,0 +1,32 @@
+<div class="modal fade" id="collaboratorsModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-friends"></i> Collaborators</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body m-3 text-dark">
+                {% if collaborators %}
+                {% for collaborator in collaborators %}
+                <div class="d-flex my-2 justify-content-between " id="user-{{collaborator.email}}">
+                    <div class="d-flex">
+                        <img src="{{collaborator.profile.image_url}}"
+                         alt="" width="40px" height="40px" class="rounded-circle">
+                        <p class="fs-4 pt-1 mx-3">
+                            {{collaborator.username.title}}
+                        </p>
+                    </div>
+                    <div class="mx-2">
+                        <button type="submit" class="btn btn-primary" data-email="{{collaborator.email}}" id="addCollaboratorBtn" onclick="removeCollaborator(this)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-center">No Collaborator Yet!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
