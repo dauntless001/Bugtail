@@ -35,7 +35,13 @@
 		</div>
 	</div>
 	{% endfor %}
+	{% if view_all %}
+	<div>
+		<a href="{% url 'projects:project_list' %}" class="btn btn-primary">View</a>
+	</div>
+	{% endif %}
 </div>
+
 
 
 
