@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load project_extras %}
-{% block page_content %}
 {% block page_header_title %}{{project.name}}{% endblock page_header_title %}
 {% block page_header_subtitle %}
     {{project.desc}}.
@@ -17,6 +16,7 @@ data-bs-toggle="modal" data-bs-target="#collaboratorsModal">
 </a>
 {% include 'partials/_collaborators_modal.html' with collaborators=project.collaborators.all %}                                
 {% endblock contributor %}
+{% block page_content %}
 <div style="overflow: scroll;max-height: 500px;">
     <div class="d-flex gx-5">
         {% for label in labels %}
@@ -26,7 +26,7 @@ data-bs-toggle="modal" data-bs-target="#collaboratorsModal">
                     <div class="card-header">
                         <div class="card-actions float-end">
                             <a href="#" class="me-1 btn btn-light" type="button" 
-                                data-bs-toggle="modal" data-bs-target="#centeredModalPrimary">
+                                data-bs-toggle="modal" data-bs-target="#centeredIssueModal">
                                 <i class="align-middle" data-feather="plus"></i>
                             </a>
                         </div>
@@ -49,7 +49,7 @@ data-bs-toggle="modal" data-bs-target="#collaboratorsModal">
         {% endfor %}
     </div>
 </div>
-{% include 'partials/_issue_modal.html' with form=form %}
+{% include 'partials/_issue_modal.html' with form=form project=project %}
 {% include 'partials/_right_offset_canva.html' with project=project %}
 {% endblock page_content %}
 {% block custom_scripts %}
@@ -132,6 +132,7 @@ const addCollaborator = () => {
         success : res => {
             showNotification(res['message'], res['messageType'])
             document.querySelector('#addCollaboratorField').value = ''
+            $('#addCollaboratorModal').modal('hide')
         },
         error : err => {
             showNotification('Error Trying to send mail to Collaborator', 'error')
@@ -148,8 +149,8 @@ const removeCollaborator = (e) => {
         data : {email : email},
         success : res => {
             showNotification(res['message'], res['messageType'])
+            $('#collaboratorsModal').modal('hide')
             document.getElementById(`user-${email}`).style.display='none'
-            console.log('Hello')
             
         },
         error : err => {
@@ -157,5 +158,32 @@ const removeCollaborator = (e) => {
         }
     })
 }
+
+document.querySelector('.issueForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = $('#issueTitle').val()
+    const desc = $('#issueDesc').val()
+    const priority = $('#id_priority').val()
+    const label = $('#issueLabel').val()
+    $('#issueTitle').val(''), $('#issueDesc').val('')
+    $.ajax({
+        url : `{% url 'projects:create_issue' 1500 %}`.replace(1500, '{{project.slug}}'),
+        method : 'POST',
+        headers : {'X-CSRFToken':'{{csrf_token}}'},
+        data : {'title':title, 'desc':desc, 'priority':priority, 'label':label},
+        success : res => {
+            $('#centeredIssueModal').modal('hide')
+            showNotification(res['message'], res['messageType'])
+            setTimeout(() => {
+                location.reload();
+
+            }, 2000)
+        },
+        error : err => {
+            showNotification('Error Trying to Create Issue', 'error')
+        },
+    })
+    $('#issueTitle').val(''), $('#issueDesc').val('')
+})
 </script>
 {% endblock custom_scripts %}

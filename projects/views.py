@@ -181,7 +181,7 @@ class AddRemoveCollaboratorView(LoginRequiredMixin, View):
             project = models.Project.objects.get(slug=self.kwargs['slug'])
             user = User.objects.get(email=ajaxData['email'])
             project.collaborators.remove(user)
-            data['message'] = f'User with email {ajaxData["email"]}'
+            data['message'] = f'Collaborator with email {ajaxData["email"]} has been removed'
             data['messageType'] = 'success'
             return JsonResponse(data, safe=False)
     def post(self, request, *args, **kwargs):
@@ -204,3 +204,38 @@ class AddRemoveCollaboratorView(LoginRequiredMixin, View):
                 data['message'] = 'User with email '+ ajaxData['email'] +' Appears not to Exist, Please Check Email and try Again'
                 data['messageType'] = 'error'
             return JsonResponse(data, safe=False)
+
+
+class CreateIssueView(LoginRequiredMixin,UserPassesTestMixin,View):
+    def get_project(self):
+        return models.Project.objects.get(slug=self.kwargs['slug'])
+    
+    def post(self, request, *args, **kwargs):
+        label = models.IssueLabel.objects.get(project=self.get_project(), short_name='open')
+        ajaxData = request.POST
+        data = {}
+        if ajaxData['label']:
+            label = models.IssueLabel.objects.get(project=self.get_project(), short_name=ajaxData['label'])
+        issue = {
+            'project':self.get_project(),
+            'name' : ajaxData['title'],
+            'desc' : ajaxData['desc'],
+            'priority': ajaxData['priority'],
+            'label': label
+
+        }
+        models.Issue.objects.create(**issue)
+        data['message'] = 'Issue Created Successfully'
+        data['messageType'] = 'success'
+        return JsonResponse(data, safe=False)
+        
+
+    def test_func(self):
+        user = self.request.user
+        if  user == self.get_project().author or user in self.get_project().collaborators.all():
+            return True
+        return False
+    
+    def handle_no_permission(self):
+        messages.success(self.request, 'You can add issues in this project')
+        return redirect('base:dashboard')

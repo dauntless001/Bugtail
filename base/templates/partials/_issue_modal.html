@@ -1,19 +1,59 @@
-<div class="modal fade" id="centeredModalPrimary" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="centeredIssueModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
+            <form  method="post" class="issueForm">
             <div class="modal-header">
                 <h5 class="modal-title">Task</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body m-3">
-
-                    {{ form.media }}
-                    {{form.as_p}}
+                
+                    <div>
+                        <label for="">Title</label>
+                        <input type="text" id="issueTitle" name="title" class="form-control">
+                    </div>
+                    <div>
+                        <label for="">Description</label>
+                        <textarea name="desc" id="issueDesc" cols="30" rows="5" class="form-control"></textarea>
+                    </div>
+                    
+                    <div>
+                        {{project.issueprioritychoices}}
+                        <label for="">Priority</label>
+                        {{form.priority}}
+                    </div>
+                    <div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="">Label</label>
+                                <select name="label" id="issueLabel" class="form-select">
+                                    {% for label in project.issuelabel_set.all %}
+                                    <option value="{{label.short_name}}" style="color: {{label.color}};">
+                                        {{label.name.title}}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% if project.collaborators.all %}
+                            <div class="col">
+                                <label for="">Assigned to</label>
+                                <select name="assignee" id="" class="form-select">
+                                    {% for collaborator in project.collaborators.all %}
+                                    <option value="">{{collaborator.email}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>   
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="submit" class="btn btn-primary">Create</button>
             </div>
+        </form>
+        
         </div>
     </div>
 </div>
