@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load project_extras %}
+{% block page_header_title %}Yeah{% endblock page_header_title %}
+{% block page_header_subtitle %}
+    Olan
+{% endblock page_header_subtitle %}
+{% block contributor %}
+<a class="text-white btn btn-primary" title="Add a Collaborator">
+    <i class="fas fa-user-plus"></i>
+</a>
+
+<a class="text-white btn btn-outline-primary" title="Collaborators" >
+    <i class="fas fa-user-friends"></i>
+</a>
+                              
+{% endblock contributor %}
+{% block page_content %}
+<div class="col-12 col-md-12 col-xxl-12">
+    <div class="card flex-fill w-100">
+        <div class="card-header">
+            <div class="d-flex justify-content-between">
+                <h3>{{issue.name}} <span class="small fw-light badge bg-info">{{issue.label.name}}</span></h3>
+            </div>
+            <p class="my-3">
+                {{issue.desc}}
+            </p>
+
+            <div class="">
+                
+                <div class="my-3">
+                    <h5>Comments</h5>
+                    <div class="border-secondary">
+                        {% for comment in issue.issue.all %}
+                        <div class="border px-3 py-2 my-2">
+                            <small class="fw-bold">{{comment.created_at}}</small>
+                            <p class="m-0">{{comment.comment | safe}}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <form action="" method="post" id="commentForm">
+                    {% csrf_token %}
+                    {{ commentForm.media }}
+                    {{commentForm.comment}}
+                    <div>
+                        <input type="submit" value="Comment" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}
+{% block custom_scripts %}
+
+<script>
+// document.querySelector('#commentForm').addEventListener('submit', e => {
+//     e.preventDefault();
+//     console.log($('#id_comment').val())
+
+// })
+
+</script>
+{% endblock custom_scripts %}

@@ -13,6 +13,7 @@ from django.views.generic import (
 from django.http import JsonResponse
 from django.views.generic.base import View
 from accounts.models import User
+from comments.forms import CommentForm
 from projects import models
 import json
 from django.core.serializers import serialize
@@ -237,5 +238,46 @@ class CreateIssueView(LoginRequiredMixin,UserPassesTestMixin,View):
         return False
     
     def handle_no_permission(self):
-        messages.success(self.request, 'You can add issues in this project')
+        messages.success(self.request, 'You can\'t add issues in this project')
+        return redirect('base:dashboard')
+
+
+class IssueView(LoginRequiredMixin,UserPassesTestMixin, View):
+    template_name = 'issues/detail.html'
+
+    def get_project(self):
+        return models.Project.objects.get(slug=self.kwargs['slug'])
+    
+    def get_issue(self):
+        return models.Issue.objects.get(project__slug=self.get_project().slug, slug=self.kwargs['issue_slug'])
+    
+    def get(self, request, *args, **kwargs):
+        commentForm = CommentForm()
+        context = {
+            'issue':self.get_issue(),
+            'commentForm' : commentForm,
+        }
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwrgs):
+        commentForm = CommentForm(request.POST)
+        comment = commentForm.save(commit=False)
+        comment.author, comment.issue = self.request.user, self.get_issue()
+        comment.save()
+        messages.success(request, 'Comment Uploaded successfully')
+        return redirect('projects:issue_detail', self.get_issue().project.slug,self.get_issue().slug)
+        # if request.is_ajax():
+        #     data = {}
+        #     data['message'] = 'Success'
+        #     return JsonResponse(data, safe=False)
+
+
+    def test_func(self):
+        user = self.request.user
+        if  user == self.get_project().author or user in self.get_project().collaborators.all():
+            return True
+        return False
+    
+    def handle_no_permission(self):
+        messages.success(self.request, 'You can\'t view issue in this project')
         return redirect('base:dashboard')

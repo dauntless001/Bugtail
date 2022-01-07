@@ -19,6 +19,6 @@
             </div>
             {% endif %}
         </div>
-        <a class="btn btn-primary btn-sm" href="#">View</a>
+        <a class="btn btn-primary btn-sm" href="{% url 'projects:issue_detail' issue.project.slug issue.slug %}">View</a>
     </div>
 </div>
