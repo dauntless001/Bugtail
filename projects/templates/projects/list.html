@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
-{% block page_content %}
-	{% block page_header_title %}
+{% block page_header_title %}
 	Projects
 	{% endblock page_header_title %}
 	{% block page_header_subtitle %}
 		Listing displays both your projects and the ones that involves you.
 	{% endblock page_header_subtitle %}
+{% block contributor %}
+<a href="{% url 'projects:project_create' %}" class="text-white btn btn-primary" title="Create a Project">
+    <i class="fas fa-project-diagram"></i>
+</a>                               
+{% endblock contributor %}
+{% block page_content %}
 <div class="row">
+	{% if projects %}
     {% for project in projects %}
 	<div class="col-12 col-md-12 col-xxl-12">
 		<div class="card flex-fill w-100">
@@ -34,6 +40,13 @@
 		</div>
 	</div>
     {% endfor %}
+	{% else %}
+	<div class="col-12">
+		<div class="card p-3">
+			<p>You have not Project Yet! <span class="fw-bold">Start a Project <a href="{% url 'projects:project_create' %}">Here</a></span></p>
+		</div>
+	</div>
+	{% endif %}
 </div>
 
 {% endblock page_content %}

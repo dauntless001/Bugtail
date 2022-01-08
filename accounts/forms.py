@@ -3,6 +3,7 @@ from accounts import models
 
 
 class UserForm(forms.ModelForm):
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'readonly':True}))
     class Meta:
         model = models.User
         fields = ['username', 'first_name', 'last_name', 'email']

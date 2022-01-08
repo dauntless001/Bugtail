@@ -1,17 +1,17 @@
 {% load static %}
 {% load project_extras %}
 <nav id="sidebar" class="sidebar">
-    <a class="sidebar-brand" href="index.html">
+    <a class="sidebar-brand" href="{% url 'base:dashboard' %}">
         <svg>
             <use xlink:href="#ion-ios-pulse-strong"></use>
         </svg>
-        Spark
+        Bugtail
     </a>
     <div class="sidebar-content">
         <div class="sidebar-user">
-            <img src="{% static 'img/avatars/avatar.jpg' %}" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
-            <div class="fw-bold">Linda Miller</div>
-            <small>Front-end Developer</small>
+            <img src="{{user.profile.image_url}}" class="img-fluid rounded-circle mb-2" alt="Linda Miller" />
+            <div class="fw-bold">{{user.username}}</div>
+            <small>{{user.profile.bio | truncatewords:6}}</small>
         </div>
 
         <ul class="sidebar-nav">

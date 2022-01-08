@@ -15,6 +15,7 @@
                   {% csrf_token %}
                   <div class="m-sm-4 text-center">
                     <p>Are you sure you want to Logout?</p>
+                    <a href="{% url 'base:dashboard' %}" class="btn btn-outline-danger">Go Back</a>
                     <button type="submit" class="btn btn-danger">{% trans 'Sign Out' %}</button>
                   </div>
                   
