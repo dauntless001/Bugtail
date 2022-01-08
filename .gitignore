@@ -1,3 +1,5 @@
 __pycache__/
 media/
 *.pyc
+*.db
+*.sqlite3

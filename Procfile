@@ -1,0 +1,1 @@
+web: gunicorn bugtail.wsgi --preload --log-file -
