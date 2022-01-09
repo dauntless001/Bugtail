@@ -8,12 +8,12 @@
             {% if issue.assigned_to %}
             <img src="{{issue.assginee_image}}" width="32" height="32" class="rounded-circle" alt="Avatar"
             data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onclick="getTask(this)" 
-            data-title="{{issue.name}}" data-desc="{{issue.desc}}" data-slug="{{issue.slug}}">
+            data-title="{{issue.name}}" data-desc="{{issue.desc}}" data-slug="{{issue.slug}}" data-assigned-to="{{issue.assigned_to.email}}">
             {% else %}
             <div class="pt-2">
                 <a href="" class="text-decoration-none text-dark" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" onclick="getTask(this)" 
-            data-title="{{issue.name}}" data-desc="{{issue.desc}}" data-slug="{{issue.slug}}">
+            data-title="{{issue.name}}" data-desc="{{issue.desc}}" data-slug="{{issue.slug}}" data-assigned-to="{{issue.assigned_to.email}}">
                 <i class="fas fa-user-plus"></i>
             </a>
             </div>

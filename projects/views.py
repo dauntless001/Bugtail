@@ -169,7 +169,7 @@ def assign_task(request):
         task.assigned_to = user if user else None
         task.save()
         data = {}
-        data['message'] = f'Task Assigned 🎈 to {user}'
+        data['message'] = f'Task Assigned 🎈 to {user}' if user else f'Task Unassigned'
         data['messageType'] = 'success'
         return JsonResponse(data)
     return redirect('project:project_list')

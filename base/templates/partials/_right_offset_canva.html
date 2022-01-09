@@ -7,9 +7,8 @@
         <div id="offcanvas-desc">
 
         </div>
-        
         <select name="" id="assign-select" class="form-select " onchange="assignTask(this)">
-            <option value=""></option>
+            <option value="">None</option>
             {% for collaborator in project.get_collaborators %}
             {% if collaborator == request.user %}
             <option value="{{request.user.email}}">Assign to Me</option>

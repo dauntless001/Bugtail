@@ -1,3 +1,4 @@
+{% load notification_extra %}
 <nav class="navbar navbar-expand navbar-theme">
     <a class="sidebar-toggle d-flex me-2">
         <i class="hamburger align-self-center"></i>
@@ -10,69 +11,46 @@
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item dropdown ms-lg-2">
+                {% unread_notifications user as notifications %}
                 <a class="nav-link dropdown-toggle position-relative" href="#" id="alertsDropdown"
                     data-bs-toggle="dropdown">
                     <i class="align-middle fas fa-bell"></i>
+                    {% if notifications %}
                     <span class="indicator"></span>
+                    {% endif %}
                 </a>
+                
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+                    {% if notifications %}
                     <div class="dropdown-menu-header">
-                        4 New Notifications
+                        {{notifications.count}} New Notifications
                     </div>
                     <div class="list-group">
+                        {% for notification in notifications %}
                         <a href="#" class="list-group-item">
                             <div class="row g-0 align-items-center">
                                 <div class="col-2">
                                     <i class="ms-1 text-danger fas fa-fw fa-bell"></i>
                                 </div>
-                                <div class="col-10">
-                                    <div class="text-dark">Update completed</div>
-                                    <div class="text-muted small mt-1">Restart server 12 to complete the update.
+                                <div class="col-10">    
+                                    <div class="text-muted small mt-1">{{notification.desc | truncatewords:15}}
                                     </div>
-                                    <div class="text-muted small mt-1">2h ago</div>
+                                    <div class="text-muted small mt-1">{{notification.created_at | timesince}} ago</div>
                                 </div>
                             </div>
                         </a>
-                        <a href="#" class="list-group-item">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-2">
-                                    <i class="ms-1 text-warning fas fa-fw fa-envelope-open"></i>
-                                </div>
-                                <div class="col-10">
-                                    <div class="text-dark">Lorem ipsum</div>
-                                    <div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate
-                                        hendrerit et.</div>
-                                    <div class="text-muted small mt-1">6h ago</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-2">
-                                    <i class="ms-1 text-primary fas fa-fw fa-building"></i>
-                                </div>
-                                <div class="col-10">
-                                    <div class="text-dark">Login from 192.186.1.1</div>
-                                    <div class="text-muted small mt-1">8h ago</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-2">
-                                    <i class="ms-1 text-success fas fa-fw fa-bell-slash"></i>
-                                </div>
-                                <div class="col-10">
-                                    <div class="text-dark">New connection</div>
-                                    <div class="text-muted small mt-1">Anna accepted your request.</div>
-                                    <div class="text-muted small mt-1">12h ago</div>
-                                </div>
-                            </div>
-                        </a>
+                        {% endfor %}
+
                     </div>
                     <div class="dropdown-menu-footer">
                         <a href="#" class="text-muted">Show all notifications</a>
                     </div>
+                    {% else %}
+                    <div class="dropdown-menu-footer">
+                        <a href="#" class="text-muted">No new notifications</a>
+                    </div>
+                    {% endif %}
+                    
                 </div>
             </li>
             <li class="nav-item dropdown ms-lg-2">

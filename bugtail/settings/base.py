@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'base',
     'collaborators',
     'comments',
+    'notifications',
     'projects',
 
     # All Auth Settings
