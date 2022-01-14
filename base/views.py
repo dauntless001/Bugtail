@@ -12,3 +12,9 @@ class DashboardView(LoginRequiredMixin, View):
             'view_all': True if projects.count() > 8 else False
         }
         return render(request, 'index.html', context)
+
+def error_404(request, exception):
+    return render(request, '404.html')
+
+def error_500(request, *args, **kwargs):
+    return render(request, '500.html')

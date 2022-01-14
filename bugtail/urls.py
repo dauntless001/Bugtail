@@ -28,6 +28,9 @@ urlpatterns = [
 ]
 
 
+handler404 = 'base.views.error_404'
+handler500 = 'base.views.error_500'
+
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
