@@ -13,4 +13,5 @@ ACCOUNT_FORMS = {
     'signup': 'bugtail.helpers.form_helper._SignupForm',
     'reset_password' : 'bugtail.helpers.form_helper._ResetPasswordForm',
     'change_password' : 'bugtail.helpers.form_helper._ChangePasswordForm',
+    'reset_password_from_key': 'bugtail.helpers.form_helper._ResetPasswordFromKeyForm',
 }

@@ -22,6 +22,11 @@ class _ResetPasswordForm(forms.ResetPasswordForm):
         super(_ResetPasswordForm, self).__init__(*args, **kwargs)
         add_form_control(self)
 
+class _ResetPasswordFromKeyForm(forms.ResetPasswordKeyForm):
+    def __init__(self, *args, **kwargs):
+        super(_ResetPasswordFromKeyForm, self).__init__(*args, **kwargs)
+        add_form_control(self)
+
 
 class _ChangePasswordForm(forms.ChangePasswordForm):
     def __init__(self, *args, **kwargs):
