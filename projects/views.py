@@ -13,6 +13,7 @@ from django.views.generic import (
 from django.http import JsonResponse
 from django.views.generic.base import View
 from accounts.models import User
+from bugtail.helpers.project_helper import get_user_projects
 from comments.forms import CommentForm
 from projects import models
 import json
@@ -26,7 +27,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
     template_name = 'projects/list.html'
 
     def get_queryset(self):
-        return models.Project.objects.filter(author=self.request.user)
+        return get_user_projects(self.request.user) #models.Project.objects.filter(author=self.request.user)
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     form_class = ProjectForm
