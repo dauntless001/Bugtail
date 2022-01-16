@@ -43,7 +43,7 @@
 
                     </div>
                     <div class="dropdown-menu-footer">
-                        <a href="#" class="text-muted">Show all notifications</a>
+                        <a href="#" class="text-muted" onclick="markRead()">Mark all as Read</a>
                     </div>
                     {% else %}
                     <div class="dropdown-menu-footer">
@@ -70,3 +70,26 @@
     </div>
 
 </nav>
+<script>
+    const markRead = () => {
+        $.ajax({
+            url : `{% url 'notifications:mark_all_as_read' %}`,
+            method : 'GET',
+            success : res => {
+                $('.list-group').empty()
+                $('.dropdown-menu-header').css('display', 'none')
+                $('.indicator').css('display', 'none')
+                $('.dropdown-menu-footer').empty()
+                $('.dropdown-menu-footer').append(
+                    `<a href="#" class="text-muted">No new notifications</a>`
+                )
+                showNotification(res['message'], res['messageType'])
+            },
+            error : err => {
+                showNotification('Error getting Notifications', 'error')
+            }
+        })
+        
+        console.log('Read')
+    }
+</script>
